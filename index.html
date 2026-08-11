@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Roulette Analyzer - Educational Statistics Tool</title>
+    <meta name="description" content="Educational roulette probability simulator. Learn statistics, probability theory, and why the house always wins.">
+    <meta name="keywords" content="roulette, probability, statistics, education, mathematics, simulator">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            padding: 40px;
+        }
+
+        h1 {
+            color: #667eea;
+            margin-bottom: 10px;
+            text-align: center;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #666;
+            margin-bottom: 30px;
+            font-size: 14px;
+        }
+
+        .disclaimer {
+            background: #fff3cd;
+            border-left: 4px solid #ffc107;
+            padding: 15px;
+            margin-bottom: 30px;
+            border-radius: 5px;
+            font-size: 13px;
+            color: #856404;
+        }
+
+        .content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+
+        .section {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 10px;
+        }
+
+        .section h2 {
+            color: #667eea;
+            margin-bottom: 15px;
+            font-size: 18px;
+        }
+
+        .input-group {
+            margin-bottom: 15px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+            color: #333;
+            font-weight: 500;
+        }
+
+        input {
+            width: 100%;
+            padding: 10px;
+            border: 2px solid #e0e0e0;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+
+        input:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        button {
+            width: 100%;
+            padding: 12px;
+            background: #667eea;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.3s;
+            margin-top: 10px;
+        }
+
+        button:hover {
+            background: #764ba2;
+        }
+
+        button.secondary {
+            background: #6c757d;
+        }
+
+        button.secondary:hover {
+            background: #5a6268;
+        }
+
+        .stats {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+        }
+
+        .stat-box {
+            background: white;
+            padding: 15px;
+            border-radius: 5px;
+            border-left: 4px solid #667eea;
+        }
+
+        .stat-label {
+            color: #666;
+            font-size: 12px;
+            text-transform: uppercase;
+            margin-bottom: 5px;
+        }
+
+        .stat-value {
+            font-size: 24px;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .probability-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        .prob-item {
+            background: white;
+            padding: 12px;
+            border-radius: 5px;
+            border-top: 3px solid #667eea;
+        }
+
+        .prob-label {
+            color: #666;
+            font-size: 12px;
+            margin-bottom: 5px;
+        }
+
+        .prob-value {
+            font-size: 18px;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .history {
+            background: white;
+            padding: 15px;
+            border-radius: 5px;
+            max-height: 200px;
+            overflow-y: auto;
+            border: 1px solid #e0e0e0;
+        }
+
+        .history-item {
+            padding: 8px;
+            border-bottom: 1px solid #f0f0f0;
+            font-size: 14px;
+        }
+
+        .history-item:last-child {
+            border-bottom: none;
+        }
+
+        .info-box {
+            background: #e7f3ff;
+            border-left: 4px solid #2196F3;
+            padding: 15px;
+            margin-top: 20px;
+            border-radius: 5px;
+            font-size: 13px;
+            color: #1565c0;
+        }
+
+        .house-edge {
+            background: #f8d7da;
+            border-left: 4px solid #dc3545;
+            padding: 15px;
+            margin-top: 15px;
+            border-radius: 5px;
+            color: #721c24;
+            font-size: 13px;
+        }
+
+        @media (max-width: 768px) {
+            .content {
+                grid-template-columns: 1fr;
+            }
+            
+            .container {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🎲 Roulette Analyzer</h1>
+        <p class="subtitle">Educational Statistics & Probability Simulator</p>
+
+        <div class="disclaimer">
+            ⚠️ <strong>Educational Tool Only:</strong> This simulator is designed to teach probability and statistics. It demonstrates why no betting system guarantees profit. Gambling may be illegal in your jurisdiction.
+        </div>
+
+        <div class="content">
+            <!-- Left Section: Input -->
+            <div class="section">
+                <h2>📊 Spin Analysis</h2>
+                
+                <div class="input-group">
+                    <label for="spinNumber">Number Where Ball Landed:</label>
+                    <input type="number" id="spinNumber" min="0" max="36" placeholder="Enter number (0-36)">
+                </div>
+
+                <button onclick="analyzeSpin()">Analyze Spin</button>
+                <button class="secondary" onclick="resetAnalysis()">Reset Analysis</button>
+
+                <div class="house-edge">
+                    <strong>House Edge (European Roulette):</strong> 2.7%<br>
+                    <strong>House Edge (American Roulette):</strong> 5.26%<br>
+                    <em>No betting system can overcome this mathematical advantage.</em>
+                </div>
+            </div>
+
+            <!-- Right Section: Results -->
+            <div class="section">
+                <h2>📈 Probability Analysis</h2>
+                
+                <div class="stats">
+                    <div class="stat-box">
+                        <div class="stat-label">Total Spins</div>
+                        <div class="stat-value" id="totalSpins">0</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-label">Unique Numbers</div>
+                        <div class="stat-value" id="uniqueNumbers">0</div>
+                    </div>
+                </div>
+
+                <div class="probability-grid">
+                    <div class="prob-item">
+                        <div class="prob-label">Red/Black (Expected)</div>
+                        <div class="prob-value">48.65%</div>
+                    </div>
+                    <div class="prob-item">
+                        <div class="prob-label">Odd/Even (Expected)</div>
+                        <div class="prob-value">48.65%</div>
+                    </div>
+                    <div class="prob-item">
+                        <div class="prob-label">High/Low (Expected)</div>
+                        <div class="prob-value">48.65%</div>
+                    </div>
+                    <div class="prob-item">
+                        <div class="prob-label">House Edge (Zero)</div>
+                        <div class="prob-value">2.70%</div>
+                    </div>
+                </div>
+
+                <div class="info-box">
+                    💡 <strong>Key Insight:</strong> Past results don't predict future outcomes. This is called the Gambler's Fallacy. Each spin is independent!
+                </div>
+            </div>
+        </div>
+
+        <!-- Spin History -->
+        <div class="section">
+            <h2>📋 Spin History</h2>
+            <div class="history" id="history">
+                <div class="history-item" style="color: #999;">No spins recorded yet. Enter a number and click "Analyze Spin" to start.</div>
+            </div>
+        </div>
+
+        <!-- Educational Info -->
+        <div class="section" style="margin-top: 20px;">
+            <h2>🎓 Why This Matters</h2>
+            <p style="line-height: 1.6; color: #555; font-size: 14px;">
+                This tool demonstrates fundamental principles of probability theory:<br><br>
+                <strong>1. House Edge:</strong> Roulette always favors the casino due to the 0 (and 00 in American roulette).<br>
+                <strong>2. Independence:</strong> Each spin is completely independent. Previous results don't influence future spins.<br>
+                <strong>3. Law of Large Numbers:</strong> Over many spins, results approach expected probability.<br>
+                <strong>4. Gambler's Fallacy:</strong> The mistaken belief that past results change future probabilities.<br><br>
+                <strong>Conclusion:</strong> No betting system can overcome the mathematical house edge. This simulator proves this principle mathematically.
+            </p>
+        </div>
+    </div>
+
+    <script>
+        let spinHistory = [];
+
+        function analyzeSpin() {
+            const spinInput = document.getElementById('spinNumber');
+            const number = parseInt(spinInput.value);
+
+            if (isNaN(number) || number < 0 || number > 36) {
+                alert('Please enter a valid number between 0 and 36');
+                return;
+            }
+
+            spinHistory.push(number);
+            updateDisplay();
+            spinInput.value = '';
+            spinInput.focus();
+        }
+
+        function resetAnalysis() {
+            if (confirm('Are you sure you want to reset all data? This cannot be undone.')) {
+                spinHistory = [];
+                updateDisplay();
+            }
+        }
+
+        function updateDisplay() {
+            // Update stats
+            document.getElementById('totalSpins').textContent = spinHistory.length;
+            document.getElementById('uniqueNumbers').textContent = new Set(spinHistory).size;
+
+            // Update history
+            const historyDiv = document.getElementById('history');
+            if (spinHistory.length === 0) {
+                historyDiv.innerHTML = '<div class="history-item" style="color: #999;">No spins recorded yet. Enter a number and click "Analyze Spin" to start.</div>';
+            } else {
+                historyDiv.innerHTML = spinHistory.map((num, idx) => 
+                    `<div class="history-item">Spin ${idx + 1}: <strong>${num}</strong></div>`
+                ).reverse().join('');
+            }
+        }
+
+        // Initialize
+        updateDisplay();
+    </script>
+</body>
+</html>
